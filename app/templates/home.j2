@@ -18,7 +18,7 @@
         <!-- <link rel="icon" type="image/png" href="images/favicon.png"> -->
     </head>
     <body>
-        <div id="app"></div>
+        <div id="app" data-react="{{ cards|tojson|safe }}"></div>
         <script src="{{ url_for('static', filename='dist/home.js') }}"></script>
     </body>
 </html>
