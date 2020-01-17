@@ -10,3 +10,10 @@ def index():
         "/game/game.j2", 
         cards = DailySetGame.get_current_cards(), 
         now=int(time.time()))
+
+@app.route('/home')
+def home():
+    return render_template(
+        "/home.j2", 
+        cards = DailySetGame.get_current_cards(), 
+        now=int(time.time()))
