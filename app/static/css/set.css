@@ -26,3 +26,7 @@
 .start-button {
     margin: 0 auto;
 }
+
+.card.selected img {
+    box-shadow: 0px 0px 5px 3px #58738a;
+}
