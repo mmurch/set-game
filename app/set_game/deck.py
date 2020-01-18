@@ -1,5 +1,6 @@
 from .card import Card
-from .features import Number, Color, Style
+from .features import Number, Color, Shape, Style
+from math import floor
 
 class Deck():
 
@@ -8,35 +9,31 @@ class Deck():
 
     @staticmethod
     def get_card_by_id(self, id):
+        if id < 1 or id > 81:
+            raise ValueError
         return Card(
             self.get_number(id),
             self.get_color(id),
             self.get_style(id)
         )
-
-    @staticmethod
-    def get_style(id):
-        if 0 < id <= 27:
-            return Style.FILLED
-        elif 27 < id <= 54:
-            return Style.SHADED
-        elif 54 < id <= 81:
-            return Style.EMPTY
-        else:
-            raise ValueError
-    
+  
     @staticmethod
     def get_color(id):
-        mod = id % 9
-        if 1 <= mod < 4:
-            return Color.RED
-        elif 4 <= mod < 7:
-            return Color.PURPLE
-        elif 7 <= mod < 9 or mod == 0:
-            return Color.GREEN
-        else:
-            raise ValueError
+        return Color(floor((id - 1) % 9 / 3))
     
     @staticmethod
     def get_number(id):
-        return id % 3 or 3
+        return Number((id - 1) % 3)
+
+    @staticmethod
+    def get_shape(id):
+        return Shape(floor((id - 1) % 27 / 9))
+
+    @staticmethod
+    def get_style(id):
+        if id <= 27:
+            return Style.FILLED
+        elif id <= 54:
+            return Style.SHADED
+        return Style.EMPTY
+    

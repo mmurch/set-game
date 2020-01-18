@@ -1,16 +1,21 @@
 from enum import Enum, auto
 
 class Color(Enum):
-    RED = auto()
-    GREEN = auto()
-    PURPLE = auto()
+    RED = 0
+    GREEN = 1
+    PURPLE = 2
 
 class Number(Enum):
-    ONE = 1
-    TWO = 2
-    THREE = 3
+    ONE = 0
+    TWO = 1
+    THREE = 2
+
+class Shape(Enum):
+    SQUIGGLE = 0
+    DIAMOND = 1
+    OVAL = 2
 
 class Style(Enum):
-    EMPTY = auto()
-    SHADED = auto()
-    FILLED = auto()
+    EMPTY = 0
+    SHADED = 1
+    FILLED = 2
