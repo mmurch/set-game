@@ -3,6 +3,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import CardGrid from './card-grid.jsx'
 import Header from './header.jsx'
 import Summary from './summary.jsx'
+import SetGame from './set-game.js'
 
 /* 
     idea: rotate the headline daily (mod date):
@@ -15,7 +16,7 @@ import Summary from './summary.jsx'
     SETtle down, now
     This is unSETtling
     SETurday Night Live
-    
+
 */
 
 const initialState = {
@@ -33,16 +34,60 @@ function reducer(state, action) {
               gameState: 'running'
             };
         case 'pause-game':
-          return {
-            ...state,
-            gameState: 'paused'
-          };
+            return {
+              ...state,
+              gameState: 'paused'
+            };
         case 'reset-game':
-          let workingState = cloneDeep(initialState);
+          var workingState = cloneDeep(initialState);
           workingState.cards = state.cards;
           return workingState;
         case 'click-card':
-            return;
+          var workingState = cloneDeep(state);
+
+          // if it's already selected, unselect it
+          let locInWS = workingState.workingSet.indexOf(action.id);
+          if (locInWS > -1){
+            workingState.workingSet.splice(locInWS, 1);
+            return workingState;
+          }
+
+          // add to working set, sort to make comparison easier later
+          workingState.workingSet.push(action.id);
+          workingState.workingSet.sort();
+
+          // otherwise, and this completes the 
+          // working set, check for set
+          if (workingState.workingSet.length == 3){
+
+            if (SetGame.isSet(...workingState.workingSet)){
+              // a set! check if already found
+              if (workingState.setsFound
+                  .some((set) => 
+                    JSON.stringify(set) == 
+                      JSON.stringify(workingState.workingSet))){
+                
+                // if found, get out
+                workingState.workingSet = [];
+                return workingState;
+              }
+
+              // not yet found, let's add it and reset
+              workingState.setsFound.push(workingState.workingSet);
+              workingState.workingSet = [];
+
+              // check if game over
+              if (workingState.setsFound.length == 6){
+                workingState.gameState = 'finished';
+              }
+
+              // todo: trigger some sort of "set found" visual
+            }
+            else {
+              workingState.workingSet = [];
+            }
+          }
+          return workingState;
     }
 }
 

@@ -8,9 +8,11 @@ function CardGrid(props){
         isFaceUp = false;
     }
 
-    const cards = props.cards.map((id) => 
-        <Card key={id} id={id} isFaceUp={isFaceUp} />
-    );
+    const cards = props.cards.map((id) => {
+        const isSelected = props.workingSet.includes(id);
+        return <Card key={id} id={id} isFaceUp={isFaceUp} 
+            isSelected={isSelected} dispatch={props.dispatch} />
+    });
     
     return (
         <div className="row">{ cards }</div>
