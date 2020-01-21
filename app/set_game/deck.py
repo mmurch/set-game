@@ -2,6 +2,7 @@ from .card import Card
 from .features import Number, Color, Shape, Style
 from math import floor
 
+
 class Deck():
 
     def __init__(self):
@@ -16,11 +17,11 @@ class Deck():
             self.get_color(id),
             self.get_style(id)
         )
-  
+
     @staticmethod
     def get_color(id):
         return Color(floor((id - 1) % 9 / 3))
-    
+
     @staticmethod
     def get_number(id):
         return Number((id - 1) % 3)
@@ -36,4 +37,3 @@ class Deck():
         elif id <= 54:
             return Style.SHADED
         return Style.EMPTY
-    

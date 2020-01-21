@@ -1,15 +1,16 @@
 from bs4 import BeautifulSoup
 import requests
 
+
 class DailySetGame:
 
     def __init__(self):
-        return        
+        return
 
     @staticmethod
     def get_current_cards():
 
-        page = requests.get('https://www.setgame.com/set/puzzle', verify = False)
+        page = requests.get('https://www.setgame.com/set/puzzle', verify=False)
 
         soup = BeautifulSoup(page.content, 'html.parser')
 

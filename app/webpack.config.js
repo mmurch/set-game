@@ -7,7 +7,7 @@ module.exports = {
         'html/home': './templates/home.j2',
     },
     output: {
-        path: __dirname+'/static/dist',
+        path: __dirname + '/static/dist',
         filename: "[name].js"
     },
     devtool: "source-map",
@@ -60,7 +60,7 @@ module.exports = {
     },
     plugins: [
         new WebpackShellPlugin({
-           onBuildEnd: ['rm -rf static/dist/html && echo "deleted the dist/html folder"'],
+            onBuildEnd: ['rm -rf static/dist/html && echo "deleted the dist/html folder"'],
         }),
     ]
 }
