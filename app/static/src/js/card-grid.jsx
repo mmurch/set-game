@@ -10,8 +10,11 @@ function CardGrid(props) {
 
     const cards = props.cards.map((id) => {
         const isSelected = props.workingSet.includes(id);
+        const justFailed = props.justFailed.includes(id);
+        const justPassed = props.justPassed.includes(id);
         return <Card key={id} id={id} isFaceUp={isFaceUp}
-            isSelected={isSelected} dispatch={props.dispatch} />
+            isSelected={isSelected} dispatch={props.dispatch} 
+            justFailed={justFailed} justPassed={justPassed} />
     });
 
     return (

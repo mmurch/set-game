@@ -45,8 +45,11 @@ function reducer(state, action) {
       workingState.cards = state.cards;
       return workingState;
     case 'click-card':
-
       var workingState = cloneDeep(state);
+      
+      // clear out the "just" collections to clear out old animation classes
+      workingState.justFailed = [];
+      workingState.justPassed = [];
 
       // if it's already selected, unselect it
       let locInWS = workingState.workingSet.indexOf(action.id);
@@ -122,6 +125,8 @@ function Game(props) {
         gameState={state.gameState}
         cards={state.cards}
         workingSet={state.workingSet}
+        justFailed={state.justFailed}
+        justPassed={state.justPassed}
         dispatch={dispatch} />
       <Summary setsFound={state.setsFound} />
     </div>
