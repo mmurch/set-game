@@ -23,7 +23,9 @@ const initialState = {
   gameState: 'unstarted', /* unstarted, running, paused, finished */
   cards: [],
   setsFound: [],
-  workingSet: []
+  workingSet: [],
+  justFailed: [],
+  justPassed: []
 };
 
 function reducer(state, action) {
@@ -43,6 +45,7 @@ function reducer(state, action) {
       workingState.cards = state.cards;
       return workingState;
     case 'click-card':
+
       var workingState = cloneDeep(state);
 
       // if it's already selected, unselect it
@@ -52,40 +55,53 @@ function reducer(state, action) {
         return workingState;
       }
 
-      // add to working set, sort to make comparison easier later
+      // if it is somehow already a full 
+      // working set (race condition), do nothing
+      if (workingState.workingSet.length >= 3) {
+        return workingState;
+      }
+
+      // else just add it
       workingState.workingSet.push(action.id);
       workingState.workingSet.sort();
+      return workingState;
+    case 'check-set':
+      var workingState = cloneDeep(state);
 
-      // otherwise, and this completes the 
-      // working set, check for set
-      if (workingState.workingSet.length == 3) {
+      // now we check for a set
+      if (workingState.workingSet.length != 3) {
+        return workingState;
+      }
 
-        if (SetGame.isSet(...workingState.workingSet)) {
-          // a set! check if already found
-          if (workingState.setsFound
-            .some((set) =>
-              JSON.stringify(set) ==
-              JSON.stringify(workingState.workingSet))) {
+      if (SetGame.isSet(...workingState.workingSet)) {
 
-            // if found, get out
-            workingState.workingSet = [];
-            return workingState;
-          }
+        // a set! check if already found
+        if (workingState.setsFound
+          .some((set) =>
+            JSON.stringify(set) ==
+            JSON.stringify(workingState.workingSet))) {
 
-          // not yet found, let's add it and reset
-          workingState.setsFound.push(workingState.workingSet);
+          // if found, get out
+          workingState.justFailed = workingState.workingSet;
           workingState.workingSet = [];
-
-          // check if game over
-          if (workingState.setsFound.length == 6) {
-            workingState.gameState = 'finished';
-          }
-
-          // todo: trigger some sort of "set found" visual
+          return workingState;
         }
-        else {
-          workingState.workingSet = [];
+
+        // it's new, let's add it and reset
+        workingState.setsFound.push(workingState.workingSet);
+        workingState.justPassed = workingState.workingSet;
+        workingState.workingSet = [];
+
+        // check if game over
+        if (workingState.setsFound.length == 6) {
+          workingState.gameState = 'finished';
         }
+
+        // todo: trigger some sort of "set found" visual
+      }
+      else {
+        workingState.justFailed = workingState.workingSet;
+        workingState.workingSet = [];
       }
       return workingState;
   }

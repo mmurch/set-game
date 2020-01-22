@@ -6,7 +6,7 @@ function Summary(props) {
     let summaryCards = [];
     for (let i = 0; i < 6; i++) {
         summaryCards.push(
-            <div className="one-third column">
+            <div className="one-third column" key={i}>
                 <div className="one-third column card">&nbsp;</div>
                 <div className="one-third column card">&nbsp;</div>
                 <div className="one-third column card">&nbsp;</div>

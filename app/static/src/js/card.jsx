@@ -8,6 +8,10 @@ function Card(props) {
 
     function handleClick() {
         props.dispatch({ type: 'click-card', id: props.id });
+
+        // this is a dirty hack to get the "selected" state to appear before
+        // clearing out the workingSet. but animations are a hackfest
+        setTimeout(() => props.dispatch({ type: 'check-set' }), 10);
     }
 
     let cssClasses = 'card';
