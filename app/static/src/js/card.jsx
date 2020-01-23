@@ -23,19 +23,13 @@ function Card(props) {
     return (
         <CSSTransitionGroup
             transitionName={{
-                enter: 'animated',
-                enterActive: 'flipInY',
-                leave: 'animated',
-                leaveActive: 'flipInY',
                 appear: 'animated',
                 appearActive: 'flipInY'
             }}
             transitionAppear={true}
-            transitionEnter={true}
-            transitionLeave={true}
-            transitionAppearTimeout={500}
-            transitionEnterTimeout={500}
-            transitionLeaveTimeout={500}>
+            transitionEnter={false}
+            transitionLeave={false}
+            transitionAppearTimeout={500}>
             <div className={`card ${selected} ${justFailed} ${justPassed}`}
                 onClick={handleClick} key={props.id}>
                 <img src={`/static/img/card_${imgId}.png`} />
