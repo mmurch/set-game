@@ -1,3 +1,7 @@
+body {
+    background-color: #f0f4fc;
+}
+
 .container {
     width: 90%;
 }
@@ -8,6 +12,11 @@
     box-sizing: border-box;
     padding: 5px;
     cursor: pointer;
+    position: relative;
+}
+
+.button {
+    background-color: #ffffff;
 }
 
 .card img {
@@ -15,6 +24,13 @@
     box-sizing: border-box;
     border-radius: 5px;
     border: solid 1px rgba(0,0,0,0.1);
+}
+
+.card-back-text {
+    position: absolute;
+    top: 24%;
+    left: 28%;
+    font-size: 5vw;
 }
 
 @media only screen and (max-width: 500px) {

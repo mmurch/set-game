@@ -17,9 +17,10 @@ function Card(props) {
     const justPassed = props.justPassed ? 'animated heartbeat fast' : '';
 
     return (
-        <div className={`card ${selected} ${justFailed} ${justPassed}`} 
-                onClick={handleClick}>
+        <div className={`card ${selected} ${justFailed} ${justPassed}`}
+            onClick={handleClick}>
             <img src={`/static/img/card_${imgId}.png`} />
+            {props.isFaceUp ? '' : <span className="card-back-text">SET</span>}
         </div>
     );
 }
