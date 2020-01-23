@@ -3,8 +3,6 @@ import { CSSTransitionGroup } from 'react-transition-group';
 
 function Card(props) {
 
-    const imgId = props.isFaceUp ? props.id : 'blank';
-
     function handleClick() {
         if (!props.isFaceUp) {
             return;
@@ -19,6 +17,8 @@ function Card(props) {
     const selected = props.isSelected ? 'selected' : '';
     const justFailed = props.justFailed ? 'animated shake faster' : '';
     const justPassed = props.justPassed ? 'animated heartbeat fast' : '';
+    
+    const imgId = props.isFaceUp ? props.id : 'blank';
 
     return (
         <CSSTransitionGroup
