@@ -3,10 +3,12 @@ import cloneDeep from 'lodash/cloneDeep'
 import CardGrid from './card-grid.jsx'
 import Header from './header.jsx'
 import Summary from './summary.jsx'
+import Metrics from './metrics.jsx'
 import SetGame from './set-game.js'
 
 /* 
     idea: rotate the headline daily (mod date):
+
     Irish SETter
     Bump, SET, Spike
     I'm a jetSETter  
@@ -16,6 +18,7 @@ import SetGame from './set-game.js'
     SETtle down, now
     This is unSETtling
     SETurday Night Live
+    Well you're a SET for sore eyes
 
 */
 
@@ -25,7 +28,8 @@ const initialState = {
   setsFound: [],
   workingSet: [],
   justFailed: [],
-  justPassed: []
+  justPassed: [],
+  events: []
 };
 
 function reducer(state, action) {
@@ -33,12 +37,20 @@ function reducer(state, action) {
     case 'start-game':
       return {
         ...state,
-        gameState: 'running'
+        gameState: 'running',
+        events: [
+          ...state.events,
+          { event: 'start-game', time: performance.now() }
+        ]
       };
     case 'pause-game':
       return {
         ...state,
-        gameState: 'paused'
+        gameState: 'paused',
+        events: [
+          ...state.events,
+          { event: 'pause-game', time: performance.now() }
+        ]
       };
     case 'reset-game':
       var workingState = cloneDeep(initialState);
@@ -46,7 +58,7 @@ function reducer(state, action) {
       return workingState;
     case 'click-card':
       var workingState = cloneDeep(state);
-      
+
       // clear out the "just" collections to clear out old animation classes
       workingState.justFailed = [];
       workingState.justPassed = [];
@@ -87,6 +99,10 @@ function reducer(state, action) {
           // if found, get out
           workingState.justFailed = workingState.workingSet;
           workingState.workingSet = [];
+          workingState.events.push({
+            event: 'set-repeat',
+            time: performance.now()
+          });
           return workingState;
         }
 
@@ -94,17 +110,23 @@ function reducer(state, action) {
         workingState.setsFound.push(workingState.workingSet);
         workingState.justPassed = workingState.workingSet;
         workingState.workingSet = [];
+        workingState.events.push({
+          event: 'set-new',
+          time: performance.now()
+        });
 
         // check if game over
         if (workingState.setsFound.length == 6) {
           workingState.gameState = 'finished';
         }
-
-        // todo: trigger some sort of "set found" visual
       }
       else {
         workingState.justFailed = workingState.workingSet;
         workingState.workingSet = [];
+        workingState.events.push({
+          event: 'set-fail',
+          time: performance.now()
+        });
       }
       return workingState;
   }
@@ -129,6 +151,7 @@ function Game(props) {
         justPassed={state.justPassed}
         dispatch={dispatch} />
       <Summary setsFound={state.setsFound} />
+      <Metrics events={state.events} />
     </div>
   );
 }
