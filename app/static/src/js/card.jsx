@@ -1,10 +1,14 @@
 import React from 'react';
+import { CSSTransitionGroup } from 'react-transition-group';
 
 function Card(props) {
 
     const imgId = props.isFaceUp ? props.id : 'blank';
 
     function handleClick() {
+        if (!props.isFaceUp) {
+            return;
+        }
         props.dispatch({ type: 'click-card', id: props.id });
 
         // this is a dirty hack to get the "selected" state to appear before
@@ -17,11 +21,27 @@ function Card(props) {
     const justPassed = props.justPassed ? 'animated heartbeat fast' : '';
 
     return (
-        <div className={`card ${selected} ${justFailed} ${justPassed}`}
-            onClick={handleClick}>
-            <img src={`/static/img/card_${imgId}.png`} />
-            {props.isFaceUp ? '' : <span className="card-back-text">SET</span>}
-        </div>
+        <CSSTransitionGroup
+            transitionName={{
+                enter: 'animated',
+                enterActive: 'flipInY',
+                leave: 'animated',
+                leaveActive: 'flipInY',
+                appear: 'animated',
+                appearActive: 'flipInY'
+            }}
+            transitionAppear={true}
+            transitionEnter={true}
+            transitionLeave={true}
+            transitionAppearTimeout={500}
+            transitionEnterTimeout={500}
+            transitionLeaveTimeout={500}>
+            <div className={`card ${selected} ${justFailed} ${justPassed}`}
+                onClick={handleClick} key={props.id}>
+                <img src={`/static/img/card_${imgId}.png`} />
+                {props.isFaceUp ? '' : <span className="card-back-text">SET</span>}
+            </div>
+        </CSSTransitionGroup>
     );
 }
 
